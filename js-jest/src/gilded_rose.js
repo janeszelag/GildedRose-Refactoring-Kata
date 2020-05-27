@@ -6,65 +6,84 @@ class Item {
   }
 }
 
+const agedBrieUpdate = (quality) => {
+  if (quality < 50) {
+    return ++quality;
+  }
+  return quality;
+};
+
+const backstageUpdate = (quality, sellIn) => {
+  if (quality < 50) {
+    quality = quality + 1;
+  }
+  if (quality < 50 && sellIn < 11) {
+    quality = quality + 1;
+  }
+  if (quality < 50 && sellIn < 6) {
+    quality = quality + 1;
+  }
+  if (sellIn === 0) {
+    quality = 0;
+  }
+  return quality;
+};
+
+const conjuredUpdate = (quality, sellIn) => {
+  if (quality !== 0 && sellIn > 0) {
+    quality = quality - 2;
+  } else if (quality !== 0 && sellIn <= 0) {
+    quality = quality - 4;
+  }
+  return quality;
+};
+
+const normalUpdate = (quality, sellIn) => {
+  if (quality !== 0 && sellIn > 0) {
+    quality = quality - 1;
+  } else if (quality !== 0 && sellIn <= 0) {
+    quality = quality - 2;
+  }
+  return quality;
+};
+
+const sellInUpdate = (sellIn) => {
+ 
+  return --sellIn
+  
+}
+
 class Shop {
   constructor(items = []) {
     this.items = items;
   }
 
   updateQuality() {
-    for (let i = 0; i < this.items.length; i++) {
-      switch (this.items[i].name) {
-        case "Aged Brie":
-          if (this.items[i].quality < 50)
-            this.items[i].quality = this.items[i].quality + 1;
+    this.items.forEach((item) => {
+      switch (true) {
+        case /aged brie/.test(item.name.toLowerCase()):
+          item.quality = agedBrieUpdate(item.quality);
           break;
 
-        case "Backstage passes to a TAFKAL80ETC concert":
-          //code from original...refactor to make more dry?
-          if (this.items[i].quality < 50) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-          if (this.items[i].quality < 50 && this.items[i].sellIn < 11) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-          if (this.items[i].quality < 50 && this.items[i].sellIn < 6) {
-            this.items[i].quality = this.items[i].quality + 1;
-          }
-          if (this.items[i].sellIn == 0) {
-            this.items[i].quality =
-              this.items[i].quality - this.items[i].quality;
-          }
-
+        case /backstage pass/.test(item.name.toLowerCase()):
+          item.quality = backstageUpdate(item.quality, item.sellIn);
           break;
 
-        case "Sulfuras, Hand of Ragnaros":
+        case /sulfuras/.test(item.name.toLowerCase()):
+          return;
+
+        case /conjured/.test(item.name.toLowerCase()):
+          item.quality = conjuredUpdate(item.quality, item.sellIn);
           break;
-
-        case "Conjured":
-          //before sellIn date has passed
-          if (this.items[i].quality !== 0 && this.items[i].sellIn > 0) {
-            this.items[i].quality = this.items[i].quality - 2;
-          //after
-          } else if (this.items[i].quality !== 0 && this.items[i].sellIn <= 0) {
-            this.items[i].quality = this.items[i].quality - 4;
-          }
-
 
         default:
-          //before sellIn date has passed
-          if (this.items[i].quality !== 0 && this.items[i].sellIn > 0) {
-            this.items[i].quality = this.items[i].quality - 1;
-          //after
-          } else if (this.items[i].quality !== 0 && this.items[i].sellIn <= 0) {
-            this.items[i].quality = this.items[i].quality - 2;
-          }
+          item.quality = normalUpdate(item.quality, item.sellIn);
       }
 
-      if (this.items[i].name !== "Sulfuras, Hand of Ragnaros") {
-        this.items[i].sellIn = this.items[i].sellIn - 1;
-      }
-    }
+       item.sellIn = sellInUpdate(item.sellIn)
 
+      
+    });
     return this.items;
   }
 }
@@ -72,4 +91,8 @@ class Shop {
 module.exports = {
   Item,
   Shop,
+  agedBrieUpdate,
+  backstageUpdate,
+  conjuredUpdate,
+  normalUpdate
 };

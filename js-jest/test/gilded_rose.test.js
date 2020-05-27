@@ -1,4 +1,4 @@
-const {Shop, Item} = require("../src/gilded_rose");
+const {Shop, Item, agedBrieUpdate, backstageUpdate} = require("../src/gilded_rose");
 
 describe("Gilded Rose", function () {
   
@@ -7,6 +7,11 @@ describe("Gilded Rose", function () {
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe("foo");
   });
+
+it("should have zero items in shop", function() {
+  const gildedRose = new Shop([])
+  expect(gildedRose.items.length).toBe(0)
+})
 
   //quality and sellIn requirements for normal items
   it("Quality of any item is never negative", function () {
@@ -119,5 +124,18 @@ describe("Gilded Rose", function () {
 
 });
  
-//throw error if starting with a negative quantity?
-//throw error if starting with a quantity above 50 (except for sulfuras)?
+
+describe("agedBrie", function () {
+  it("increments value by 1", function () {
+    const quality = 1
+    const newQuality = agedBrieUpdate(quality)
+    expect(newQuality).toBe(2);
+  });
+
+  it("does not increment value over 50", function () {
+    const quality = 50
+    const newQuality = agedBrieUpdate(quality)
+    expect(newQuality).toBe(50);
+  });
+
+});

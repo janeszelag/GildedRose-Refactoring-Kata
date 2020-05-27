@@ -84,7 +84,7 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(0);
   });
 
-  //new "conjured" feature test
+  //new "conjured" feature tests
   it("Conjured items degrade in Quality twice as fast as normal items", function () {
     const gildedRose = new Shop([
       new Item("Conjured", 2, 2),
@@ -93,5 +93,23 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(0);
   });
 
+  it("Conjured items degrade in Quality twice as fast after sellIn data has passed", function () {
+    const gildedRose = new Shop([
+      new Item("Conjured", 0, 4),
+    ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(0);
+  });
+
+  it("Conjured items Quality is never negative", function () {
+    const gildedRose = new Shop([
+      new Item("Conjured", 0, 0),
+    ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(0);
+  });
+
 });
  
+//throw error if starting with a negative quantity?
+//throw error if starting with a quantity above 50 (except for sulfuras)?

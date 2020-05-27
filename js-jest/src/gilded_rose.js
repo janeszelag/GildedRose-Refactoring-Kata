@@ -39,9 +39,21 @@ class Shop {
         case "Sulfuras, Hand of Ragnaros":
           break;
 
+        case "Conjured":
+          //before sellIn date has passed
+          if (this.items[i].quality !== 0 && this.items[i].sellIn > 0) {
+            this.items[i].quality = this.items[i].quality - 2;
+          //after
+          } else if (this.items[i].quality !== 0 && this.items[i].sellIn <= 0) {
+            this.items[i].quality = this.items[i].quality - 4;
+          }
+
+
         default:
+          //before sellIn date has passed
           if (this.items[i].quality !== 0 && this.items[i].sellIn > 0) {
             this.items[i].quality = this.items[i].quality - 1;
+          //after
           } else if (this.items[i].quality !== 0 && this.items[i].sellIn <= 0) {
             this.items[i].quality = this.items[i].quality - 2;
           }

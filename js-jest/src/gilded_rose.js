@@ -20,6 +20,7 @@ class Shop {
           break;
 
         case "Backstage passes to a TAFKAL80ETC concert":
+          //code from original...refactor to make more dry?
           if (this.items[i].quality < 50) {
             this.items[i].quality = this.items[i].quality + 1;
           }

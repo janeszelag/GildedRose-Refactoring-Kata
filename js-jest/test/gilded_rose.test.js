@@ -47,7 +47,7 @@ describe("Gilded Rose", function () {
   });
 
   //sulfuras tests
-  it("sulfuras never decreases in Quality", function () {
+  it("sulfuras never decreases/increases in Quality", function () {
     const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 1, 80)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(80);
@@ -84,6 +84,14 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(0);
   });
 
+  it("Quality of backstage passes is never more than 50", function () {
+    const gildedRose = new Shop([
+      new Item("Backstage passes to a TAFKAL80ETC concert", 3, 50),
+    ]);
+    const items = gildedRose.updateQuality();
+    expect(items[0].quality).toBe(50);
+  });
+
   //new "conjured" feature tests
   it("Conjured items degrade in Quality twice as fast as normal items", function () {
     const gildedRose = new Shop([
@@ -93,7 +101,7 @@ describe("Gilded Rose", function () {
     expect(items[0].quality).toBe(0);
   });
 
-  it("Conjured items degrade in Quality twice as fast after sellIn data has passed", function () {
+  it("Conjured items degrade in Quality twice as fast after sellIn date has passed", function () {
     const gildedRose = new Shop([
       new Item("Conjured", 0, 4),
     ]);

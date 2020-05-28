@@ -21,7 +21,6 @@ const backstageUpdate = (item) => {
   } else {
     item.quality = item.quality < 50 ? ++item.quality : 50;
   }
-
   return item;
 };
 
@@ -30,12 +29,6 @@ const conjuredUpdate = (item) => {
     item.quality = item.sellIn > 0 ? item.quality - 2 : item.quality - 4;
   }
   return item;
-  // if (item.quality !== 0) {
-  //   return {
-  //     ...item, quality: item.sellIn > 0 ? item.quality - 2 : item.quality - 4
-  //   }
-  // }
- 
 };
 
 const normalUpdate = (item) => {
@@ -46,11 +39,10 @@ const normalUpdate = (item) => {
 };
 
 const sellInUpdate = (item) => {
-  --item.sellIn;
+   if (!(/sulfuras/.test(item.name.toLowerCase()))) {
+    --item.sellIn;
+   }
   return item;
-  //  return {
-  //   ...item, sellIn: --item.sellIn
-  // }
 };
 
 class Shop {
@@ -59,7 +51,7 @@ class Shop {
   }
 
   updateQuality() {
-    this.items.forEach((item) => {
+  let newItems = this.items.map((item) => {
       switch (true) {
         case /aged brie/.test(item.name.toLowerCase()):
           agedBrieUpdate(item);
@@ -70,7 +62,7 @@ class Shop {
           break;
 
         case /sulfuras/.test(item.name.toLowerCase()):
-          return;
+          break;
 
         case /conjured/.test(item.name.toLowerCase()):
           conjuredUpdate(item);
@@ -80,8 +72,10 @@ class Shop {
           normalUpdate(item);
       }
       sellInUpdate(item);
+      return item;
     });
-    return this.items;
+    this.items = newItems; 
+    return this.items
   }
 }
 
@@ -94,3 +88,4 @@ module.exports = {
   normalUpdate,
   sellInUpdate,
 };
+

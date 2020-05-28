@@ -10,9 +10,16 @@ const {
 
 //tests the shop
 describe("Gilded Rose Shop", function () {
-  it("an empty shop should remain empty", function () {
+  it("an empty shop should remain empty and throw no error during update", function () {
     const gildedRose = new Shop([]);
-    expect(gildedRose.items.length).toBe(0);
+    const items = gildedRose.updateQuality();
+    expect(items.length).toBe(0);
+  });
+
+  it("shop should maintain the number of items after update", function () {
+    const gildedRose = new Shop([new Item("foo", 2, 2), new Item("bar", 2, 2)]);
+    const items = gildedRose.updateQuality();
+    expect(items.length).toBe(2);
   });
 
   it("Quality of any item is never negative", function () {
@@ -21,14 +28,17 @@ describe("Gilded Rose Shop", function () {
     expect(items[0].quality).not.toBe(-1);
   });
 
-  it("sellIn of items decreases by 1 at the end of each day", function () {
+  it("sellIn of items is updated", function () {
     const gildedRose = new Shop([new Item("foo", 1, 1)]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(0);
   });
 
   it("normal items are updated", function () {
-    const gildedRose = new Shop([new Item("Foo", 2, 2), new Item("Coin", 3, 3) ]);
+    const gildedRose = new Shop([
+      new Item("Foo", 2, 2),
+      new Item("Coin", 3, 3),
+    ]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(1);
     expect(items[0].sellIn).toBe(1);
@@ -57,7 +67,6 @@ describe("Gilded Rose Shop", function () {
     expect(items[0].sellIn).toBe(-1);
   });
 
-
   it("sulfuras is never updated", function () {
     const gildedRose = new Shop([
       new Item("Sulfuras, Hand of Ragnaros", 1, 80),
@@ -80,8 +89,6 @@ describe("Gilded Rose Shop", function () {
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
-
-
 });
 
 //tests the agedBrieUpdate function

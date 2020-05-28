@@ -7,43 +7,51 @@ class Item {
 }
 
 const agedBrieUpdate = (item) => {
-  item.quality = item.quality < 50 ? ++item.quality : 50
+  item.quality = item.quality < 50 ? ++item.quality : 50;
   return item;
 };
 
 const backstageUpdate = (item) => {
-
   if (item.sellIn === 0) {
     item.quality = 0;
   } else if (item.sellIn < 6) {
-    item.quality = item.quality < 47 ? item.quality + 3 : 50
+    item.quality = item.quality < 47 ? item.quality + 3 : 50;
   } else if (item.sellIn < 11) {
-    item.quality = item.quality < 48 ? item.quality + 2 : 50
+    item.quality = item.quality < 48 ? item.quality + 2 : 50;
   } else {
-    item.quality = item.quality < 50 ? ++item.quality : 50
+    item.quality = item.quality < 50 ? ++item.quality : 50;
   }
-  
+
   return item;
 };
 
 const conjuredUpdate = (item) => {
   if (item.quality !== 0) {
-    item.quality = item.sellIn > 0 ? item.quality - 2 : item.quality = item.quality - 4
+    item.quality = item.sellIn > 0 ? item.quality - 2 : item.quality - 4;
   }
   return item;
+  // if (item.quality !== 0) {
+  //   return {
+  //     ...item, quality: item.sellIn > 0 ? item.quality - 2 : item.quality - 4
+  //   }
+  // }
+ 
 };
 
 const normalUpdate = (item) => {
   if (item.quality !== 0) {
-    item.quality = item.sellIn > 0 ? --item.quality : item.quality = item.quality - 2
+    item.quality = item.sellIn > 0 ? --item.quality : item.quality - 2;
   }
   return item;
 };
 
 const sellInUpdate = (item) => {
-  return --item.sellIn;
+  --item.sellIn;
+  return item;
+  //  return {
+  //   ...item, sellIn: --item.sellIn
+  // }
 };
-
 
 class Shop {
   constructor(items = []) {
@@ -71,7 +79,6 @@ class Shop {
         default:
           normalUpdate(item);
       }
-
       sellInUpdate(item);
     });
     return this.items;
@@ -85,4 +92,5 @@ module.exports = {
   backstageUpdate,
   conjuredUpdate,
   normalUpdate,
+  sellInUpdate,
 };

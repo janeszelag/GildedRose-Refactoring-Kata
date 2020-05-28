@@ -1,17 +1,21 @@
-const {Shop, Item, agedBrieUpdate, backstageUpdate} = require("../src/gilded_rose");
+const {
+  Shop,
+  Item,
+  agedBrieUpdate,
+  backstageUpdate,
+} = require("../src/gilded_rose");
 
 describe("Gilded Rose", function () {
-  
   it("name of item doesn't change", function () {
     const gildedRose = new Shop([new Item("foo", 0, 0)]);
     const items = gildedRose.updateQuality();
     expect(items[0].name).toBe("foo");
   });
 
-it("should have zero items in shop", function() {
-  const gildedRose = new Shop([])
-  expect(gildedRose.items.length).toBe(0)
-})
+  it("should have zero items in shop", function () {
+    const gildedRose = new Shop([]);
+    expect(gildedRose.items.length).toBe(0);
+  });
 
   //quality and sellIn requirements for normal items
   it("Quality of any item is never negative", function () {
@@ -53,13 +57,17 @@ it("should have zero items in shop", function() {
 
   //sulfuras tests
   it("sulfuras never decreases/increases in Quality", function () {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 1, 80)]);
+    const gildedRose = new Shop([
+      new Item("Sulfuras, Hand of Ragnaros", 1, 80),
+    ]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(80);
   });
 
   it("sulfuras never has to be sold", function () {
-    const gildedRose = new Shop([new Item("Sulfuras, Hand of Ragnaros", 1, 80)]);
+    const gildedRose = new Shop([
+      new Item("Sulfuras, Hand of Ragnaros", 1, 80),
+    ]);
     const items = gildedRose.updateQuality();
     expect(items[0].sellIn).toBe(1);
   });
@@ -99,43 +107,38 @@ it("should have zero items in shop", function() {
 
   //new "conjured" feature tests
   it("Conjured items degrade in Quality twice as fast as normal items", function () {
-    const gildedRose = new Shop([
-      new Item("Conjured", 2, 2),
-    ]);
+    const gildedRose = new Shop([new Item("Conjured", 2, 2)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
 
   it("Conjured items degrade in Quality twice as fast after sellIn date has passed", function () {
-    const gildedRose = new Shop([
-      new Item("Conjured", 0, 4),
-    ]);
+    const gildedRose = new Shop([new Item("Conjured", 0, 4)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
 
   it("Conjured items Quality is never negative", function () {
-    const gildedRose = new Shop([
-      new Item("Conjured", 0, 0),
-    ]);
+    const gildedRose = new Shop([new Item("Conjured", 0, 0)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
   });
-
 });
- 
 
-describe("agedBrie", function () {
-  it("increments value by 1", function () {
-    const quality = 1
-    const newQuality = agedBrieUpdate(quality)
-    expect(newQuality).toBe(2);
+describe("agedBrieUpdate", function () {
+
+  it("the Quality of Aged Brie increases by 1 by one at the end of each day", function () {
+    const brieItem = new Item("Aged Brie", 1, 1);
+    const updatedBrie = agedBrieUpdate(brieItem)
+    expect(updatedBrie.quality).toBe(2);
   });
 
   it("does not increment value over 50", function () {
-    const quality = 50
-    const newQuality = agedBrieUpdate(quality)
-    expect(newQuality).toBe(50);
+    const brieItem = new Item("Aged Brie", 1, 50);
+    const updatedBrie = agedBrieUpdate(brieItem)
+    expect(updatedBrie.quality).toBe(50);
   });
-
 });
+
+
+//test for if its 48 does it still add up to 50 

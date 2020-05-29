@@ -39,9 +39,9 @@ const normalUpdate = (item) => {
 };
 
 const sellInUpdate = (item) => {
-   if (!(/sulfuras/.test(item.name.toLowerCase()))) {
+  if (!/sulfuras/.test(item.name.toLowerCase())) {
     --item.sellIn;
-   }
+  }
   return item;
 };
 
@@ -51,7 +51,14 @@ class Shop {
   }
 
   updateQuality() {
-  let newItems = this.items.map((item) => {
+    let newItems = this.items.map((item) => {
+      if (
+        (typeof item.quality !== "number") |
+        (typeof item.sellIn !== "number")
+      ) {
+        throw `quality or sellIn of ${item} is not a number!`;
+      }
+
       switch (true) {
         case /aged brie/.test(item.name.toLowerCase()):
           agedBrieUpdate(item);
@@ -74,8 +81,8 @@ class Shop {
       sellInUpdate(item);
       return item;
     });
-    this.items = newItems; 
-    return this.items
+    this.items = newItems;
+    return this.items;
   }
 }
 
@@ -88,4 +95,3 @@ module.exports = {
   normalUpdate,
   sellInUpdate,
 };
-

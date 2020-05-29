@@ -8,7 +8,7 @@ const {
   sellInUpdate,
 } = require("../src/gilded_rose");
 
-//tests the shop
+//tests updateQuality()
 describe("Gilded Rose Shop", function () {
   it("an empty shop should remain empty and throw no error during update", function () {
     const gildedRose = new Shop([]);
@@ -20,12 +20,6 @@ describe("Gilded Rose Shop", function () {
     const gildedRose = new Shop([new Item("foo", 2, 2), new Item("bar", 2, 2)]);
     const items = gildedRose.updateQuality();
     expect(items.length).toBe(2);
-  });
-
-  it("Quality of any item is never negative", function () {
-    const gildedRose = new Shop([new Item("foo", 0, 0)]);
-    const items = gildedRose.updateQuality();
-    expect(items[0].quality).not.toBe(-1);
   });
 
   it("sellIn of items is updated", function () {
@@ -60,13 +54,6 @@ describe("Gilded Rose Shop", function () {
     expect(items[0].quality).toBe(2);
   });
 
-  it("agedBrie is updated", function () {
-    const gildedRose = new Shop([new Item("Aged Brie", 0, 50)]);
-    const items = gildedRose.updateQuality();
-    expect(items[0].quality).toBe(50);
-    expect(items[0].sellIn).toBe(-1);
-  });
-
   it("sulfuras is never updated", function () {
     const gildedRose = new Shop([
       new Item("Sulfuras, Hand of Ragnaros", 1, 80),
@@ -88,6 +75,22 @@ describe("Gilded Rose Shop", function () {
     const gildedRose = new Shop([new Item("Conjured", 2, 2)]);
     const items = gildedRose.updateQuality();
     expect(items[0].quality).toBe(0);
+  });
+
+  test("throws error if sellIn is not a number", () => {
+    const gildedRose = new Shop([new Item("Conjured", "cow", 2)]);
+    function errTest() {
+      gildedRose.updateQuality();
+    }
+    expect(errTest).toThrowError("not a number");
+  });
+
+  test("throws error if quality is not a number", () => {
+    const gildedRose = new Shop([new Item("Conjured", 2, "cat")]);
+    function errTest() {
+      gildedRose.updateQuality();
+    }
+    expect(errTest).toThrowError("not a number");
   });
 });
 
